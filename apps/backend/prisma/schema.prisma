@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://new_root:root@localhost:5432/todo"
+}
+
+model Task {
+  id         String @id @default(uuid())
+  title      String
+  isMine     Boolean @default(false)
+  owner      User   @relation("UserTasks", fields: [userId], references: [id])
+  userId     String
+  assignedTo User?  @relation("AssignedTasks", fields: [assignedToId], references: [id])
+  assignedToId String?
+  sharedWith User[] @relation("SharedTasks")
+}
+
+
+model User {
+  id          String @id @default(uuid())
+  email       String @unique
+  tasks       Task[] @relation("UserTasks")
+  sharedTasks Task[] @relation("SharedTasks")
+  assignedTasks Task[] @relation("AssignedTasks")
+}

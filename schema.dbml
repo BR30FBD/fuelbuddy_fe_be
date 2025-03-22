@@ -1,0 +1,21 @@
+Table User {
+  id            uuid    [primary key, default: gen_random_uuid()]
+  email         varchar [unique, not null]
+  createdAt     timestamp [default: now()]
+  updatedAt     timestamp
+}
+
+Table Task {
+  id            uuid    [primary key, default: gen_random_uuid()]
+  title         varchar [not null]
+  isMine        boolean [default: false]
+  userId        uuid    [not null, ref: > User.id]
+  assignedToId  uuid    [ref: > User.id]
+  createdAt     timestamp [default: now()]
+  updatedAt     timestamp
+}
+
+
+Ref: Task.userId > User.id
+Ref: Task.assignedToId > User.id
+
